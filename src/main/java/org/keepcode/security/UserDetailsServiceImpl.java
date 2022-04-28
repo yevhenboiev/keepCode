@@ -1,7 +1,7 @@
 package org.keepcode.security;
 
 import org.keepcode.entity.Subscriber;
-import org.keepcode.exception.userException.NotExistUserException;
+import org.keepcode.exception.subscriberException.NotExistSubscriberException;
 import org.keepcode.repository.SubscriberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         Subscriber subscriber = subscriberRepository.findByEmail(login)
-                .orElseThrow(() -> new NotExistUserException(login));
+                .orElseThrow(() -> new NotExistSubscriberException(login));
         return SecurityUser.clientToUserDetails(subscriber);
     }
 }

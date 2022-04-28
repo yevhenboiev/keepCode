@@ -5,8 +5,8 @@ import org.keepcode.dto.SubscriberAuthDTO;
 import org.keepcode.dto.SubscriberDTO;
 import org.keepcode.entity.Subscriber;
 import org.keepcode.entity.enums.Role;
-import org.keepcode.exception.userException.ExistUserException;
-import org.keepcode.exception.userException.NotExistUserException;
+import org.keepcode.exception.subscriberException.ExistSubscriberException;
+import org.keepcode.exception.subscriberException.NotExistSubscriberException;
 import org.keepcode.mapper.SubscriberMapper;
 import org.keepcode.repository.SubscriberRepository;
 import org.keepcode.service.ClientService;
@@ -32,7 +32,7 @@ public class SubscriberServiceImpl implements SubscriberService {
     @Override
     public SubscriberDTO save(SubscriberAuthDTO subscriberAuthDto) {
         if (subscriberRepository.findByEmail(subscriberAuthDto.getEmail()).isPresent()) {
-            throw new ExistUserException(subscriberAuthDto.getEmail());
+            throw new ExistSubscriberException(subscriberAuthDto.getEmail());
         }
         Subscriber subscriber = subscriberMapper.toEntity(subscriberAuthDto);
         subscriber.setPassword(passwordEncoder.encode(subscriberAuthDto.getPassword()));
@@ -45,7 +45,7 @@ public class SubscriberServiceImpl implements SubscriberService {
     public Subscriber getByEmail(String email) {
         Optional<Subscriber> clientOptional = subscriberRepository.findByEmail(email);
         if (!clientOptional.isPresent()) {
-            throw new NotExistUserException("Not found client by " + email);
+            throw new NotExistSubscriberException("Not found client by " + email);
         }
         return clientOptional.get();
     }
@@ -54,7 +54,7 @@ public class SubscriberServiceImpl implements SubscriberService {
     public Subscriber getById(Long subscriber_id) {
         Optional<Subscriber> subscriber = subscriberRepository.findById(subscriber_id);
         if(!subscriber.isPresent()) {
-            throw new NotExistUserException("Not exist subscriber by id " + subscriber_id);
+            throw new NotExistSubscriberException("Not exist subscriber by id " + subscriber_id);
         }
         return subscriber.get();
     }
